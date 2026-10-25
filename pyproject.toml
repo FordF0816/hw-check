@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hw-check"
+version = "0.1.0"
+description = "Catch the mistakes that make an autograder score 0."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "group04" }]
+keywords = ["autograder", "education", "static-analysis", "python", "homework"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Education",
+    "Topic :: Education",
+]
+
+[project.urls]
+Homepage = "https://github.com/REPLACE-ME/hw-check"
+Repository = "https://github.com/REPLACE-ME/hw-check"
+
+[project.scripts]
+hw-check = "hw_check.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hw_check*"]
