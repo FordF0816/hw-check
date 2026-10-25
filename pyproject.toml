@@ -18,8 +18,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/REPLACE-ME/hw-check"
-Repository = "https://github.com/REPLACE-ME/hw-check"
+Homepage = "https://github.com/FordF0816/hw-check"
+Repository = "https://github.com/FordF0816/hw-check"
 
 [project.scripts]
 hw-check = "hw_check.cli:main"
