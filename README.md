@@ -26,6 +26,37 @@ Nothing checks for this. `pytest` checks logic. `flake8` checks style.
 
 ---
 
+## Innovation
+
+Existing tools answer a different question.
+
+| Tool | Answers | Cannot answer |
+|---|---|---|
+| `pytest` | does the logic produce the right value? | will the autograder even find the function? |
+| `flake8` | is the code styled correctly? | is the output format what the grader expects? |
+| `mypy` | are the types consistent? | does `__init__` return a value? |
+
+None of them model **the grader's contract** — the set of structural
+assumptions an autograder makes before it ever runs your logic:
+
+- the function exists and is spelled exactly right
+- the arguments it passes are not discarded
+- the output is produced with `return`, not `print`
+- the number formatting matches character for character
+
+`hw-check` checks that contract. It is not a linter for style and not a test
+runner for logic — it sits in the gap between the two, which is exactly where
+marks are lost.
+
+Two design choices make it usable in that gap:
+
+- **`ast` only, never `exec`.** A submission with an infinite loop still gets
+  checked in milliseconds, so it is safe to run on other people's code.
+- **Zero dependencies.** `pip install hw-check` cannot conflict with anything
+  already on a teaching cluster.
+
+---
+
 ## Install
 
 ```bash
@@ -111,6 +142,57 @@ from hw_check import check_file
 
 for issue in check_file("my_solution.py", spec="sum_even_digits"):
     print(issue["id"], issue["rule"], issue["detail"])
+```
+
+---
+
+## Example use cases
+
+### 1. Check your own work before submitting
+
+The common case. Write the solution, run the checker, fix the structural
+mistakes, then submit once.
+
+```bash
+hw-check solution.py --spec sum_even_digits
+```
+
+Exit code `1` means something fired, so it can gate a submit script:
+
+```bash
+hw-check solution.py --spec sum_even_digits && echo "safe to submit"
+```
+
+### 2. Scan a whole folder of submissions
+
+Because it only parses, it is fast enough to run over a class set.
+
+```bash
+for f in submissions/*.py; do
+    echo "== $f"
+    hw-check "$f" --spec sum_even_digits --no-colour | tail -3
+done
+```
+
+### 3. Run it from Python, for a dashboard or a bot
+
+```python
+from pathlib import Path
+from hw_check import check_file
+
+for path in Path("submissions").glob("*.py"):
+    issues = check_file(path, spec="sum_even_digits")
+    if issues:
+        print(path.name, [i["id"] for i in issues])
+```
+
+### 4. Catch a regression in your own teaching material
+
+A reference solution that used to score 10/10 dropping to 8/10 usually means
+the example file was edited by accident.
+
+```bash
+hw-check examples/clean.py --spec sum_even_digits || echo "example drifted"
 ```
 
 ---
