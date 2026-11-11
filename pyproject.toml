@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hw-check"
-version = "0.1.0"
+version = "0.2.0"
 description = "Catch the mistakes that make an autograder score 0."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -15,14 +15,24 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Intended Audience :: Education",
     "Topic :: Education",
+    "Environment :: Console",
+    "Typing :: Typed",
 ]
 
 [project.urls]
 Homepage = "https://github.com/FordF0816/hw-check"
 Repository = "https://github.com/FordF0816/hw-check"
+Documentation = "https://FordF0816.github.io/hw-check/"
+Changelog = "https://github.com/FordF0816/hw-check/blob/main/CHANGELOG.md"
 
 [project.scripts]
 hw-check = "hw_check.cli:main"
 
+[project.optional-dependencies]
+dev = ["pytest>=7", "mkdocs>=1.5", "mkdocs-material>=9"]
+
 [tool.setuptools.packages.find]
 include = ["hw_check*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

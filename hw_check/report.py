@@ -1,4 +1,4 @@
-"""Turn a list of issues into something a human wants to read."""
+"""Turn a list of issues into something a human (or a script) wants to read."""
 
 # ANSI colours — disabled automatically when output is piped
 RED = "\033[31m"
@@ -13,12 +13,34 @@ def _paint(text, colour, enabled):
     return f"{colour}{text}{RESET}" if enabled else text
 
 
-def format_report(path, issues, total_rules, colour=True):
+def summarise(issues, total_rules):
+    """Return (passed, failed) counts based on distinct rule ids."""
+    fired = {i["id"] for i in issues}
+    return total_rules - len(fired), len(fired)
+
+
+def format_json(path, issues, total_rules, specs=None):
+    """Machine-readable report, for editors and pre-submit hooks."""
+    passed, failed = summarise(issues, total_rules)
+    return {
+        "file": path,
+        "specs": list(specs or []),
+        "total_rules": total_rules,
+        "passed": passed,
+        "failed": failed,
+        "issues": issues,
+    }
+
+
+def format_report(path, issues, total_rules, colour=True, specs=None):
     lines = []
-    passed = total_rules - len({i["id"] for i in issues})
+    passed, _ = summarise(issues, total_rules)
 
     lines.append("")
-    lines.append(f"{_paint('checking', DIM, colour)} {path}")
+    header = f"{_paint('checking', DIM, colour)} {path}"
+    if specs:
+        header += _paint(f"  (spec: {', '.join(specs)})", DIM, colour)
+    lines.append(header)
     lines.append("")
 
     if not issues:
@@ -28,10 +50,8 @@ def format_report(path, issues, total_rules, colour=True):
         return "\n".join(lines)
 
     for issue in issues:
-        lines.append(
-            _paint(f"  [{issue['id']}] {issue['rule']}", RED, colour)
-        )
-        lines.append(f"      line {issue['line']}: {issue['detail']}")
+        lines.append(_paint(f"  [{issue['id']:>2}] {issue['rule']}", RED, colour))
+        lines.append(f"       line {issue['line']}: {issue['detail']}")
         lines.append("")
 
     lines.append(_paint(f"  {passed} of {total_rules} checks passed", YELLOW, colour))

@@ -1,0 +1,36 @@
+site_name: hw-check
+site_description: Catch the mistakes that make an autograder score 0.
+site_url: https://FordF0816.github.io/hw-check/
+repo_url: https://github.com/FordF0816/hw-check
+repo_name: FordF0816/hw-check
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: teal
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - Rules: rules.md
+  - Demo: demo.md

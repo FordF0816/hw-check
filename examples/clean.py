@@ -1,4 +1,4 @@
-# A correct solution — every rule should pass.
+# A correct solution - every rule passes.
 
 def sum_even_digits(n):
     total = 0
@@ -7,6 +7,11 @@ def sum_even_digits(n):
         if r % 2 == 0:
             total = total + r
     return total
+
+
+def mean(nums):
+    # fixed decimals belong in an f-string, not in round()
+    return f"{sum(nums) / len(nums):.2f}"
 
 
 class Rectangle:

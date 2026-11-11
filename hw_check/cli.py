@@ -1,14 +1,19 @@
 """Command line entry point."""
 
 import argparse
+import json
 import sys
 
-from .parser import parse_file, functions
-from .report import format_report
-from .rules import ALL_RULES
+from .parser import functions, parse_file
+from .report import format_json, format_report
+from .rules import TOTAL_RULES, Context, run_all
+
+EXIT_OK = 0
+EXIT_ISSUES = 1
+EXIT_ERROR = 2
 
 
-def main(argv=None):
+def build_parser():
     parser = argparse.ArgumentParser(
         prog="hw-check",
         description="Check whether a Python homework will score 0 on an autograder.",
@@ -17,34 +22,58 @@ def main(argv=None):
     parser.add_argument(
         "--spec",
         metavar="NAME",
-        help="the function name the question asks for, e.g. sum_even_digits",
+        action="append",
+        default=None,
+        help="the function name the question asks for, e.g. sum_even_digits. "
+        "Repeat the flag to accept several names.",
     )
     parser.add_argument(
-        "--no-colour", action="store_true", help="disable ANSI colours"
+        "--json", action="store_true", help="print a machine-readable report"
     )
-    args = parser.parse_args(argv)
+    parser.add_argument(
+        "--no-colour",
+        "--no-color",
+        dest="no_colour",
+        action="store_true",
+        help="disable ANSI colours",
+    )
+    parser.add_argument(
+        "--version", action="version", version="hw-check 0.2.0"
+    )
+    return parser
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
 
     try:
-        tree, _ = parse_file(args.file)
+        tree, source = parse_file(args.file)
     except FileNotFoundError:
         print(f"hw-check: no such file: {args.file}", file=sys.stderr)
-        return 2
+        return EXIT_ERROR
     except SyntaxError as e:
         print(f"hw-check: cannot parse {args.file}: {e}", file=sys.stderr)
-        return 2
+        return EXIT_ERROR
 
-    funcs = functions(tree)
+    specs = args.spec or []
+    ctx = Context(funcs=functions(tree), tree=tree, source=source, specs=specs)
+    issues = run_all(ctx)
 
-    issues = []
-    for rule in ALL_RULES:
-        if rule.__name__ == "rule_function_name":
-            issues.extend(rule(funcs, spec_name=args.spec))
-        else:
-            issues.extend(rule(funcs))
+    if args.json:
+        print(
+            json.dumps(
+                format_json(args.file, issues, TOTAL_RULES, specs=specs), indent=2
+            )
+        )
+    else:
+        colour = not args.no_colour and sys.stdout.isatty()
+        print(
+            format_report(
+                args.file, issues, TOTAL_RULES, colour=colour, specs=specs
+            )
+        )
 
-    issues.sort(key=lambda i: (i["line"], i["id"]))
-    print(format_report(args.file, issues, len(ALL_RULES), colour=not args.no_colour))
-    return 0 if not issues else 1
+    return EXIT_OK if not issues else EXIT_ISSUES
 
 
 if __name__ == "__main__":
