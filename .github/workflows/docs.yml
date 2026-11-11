@@ -8,6 +8,12 @@ on:
 permissions:
   contents: write
 
+# Two deployments pushing to gh-pages at the same time overwrite each other.
+# Keep one at a time; a newer commit cancels an older build.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
