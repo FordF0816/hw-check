@@ -2,6 +2,11 @@
 
 **Catch the mistakes that make an autograder score 0 — before you submit.**
 
+[![PyPI](https://img.shields.io/pypi/v/hw-check.svg)](https://pypi.org/project/hw-check/)
+[![Python versions](https://img.shields.io/pypi/pyversions/hw-check.svg)](https://pypi.org/project/hw-check/)
+[![docs](https://img.shields.io/badge/docs-online-1D9E75.svg)](https://fordf0816.github.io/hw-check/)
+[![licence](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
+
 [docs](https://fordf0816.github.io/hw-check/) · [PyPI](https://pypi.org/project/hw-check/) · [changelog](CHANGELOG.md)
 
 ---
