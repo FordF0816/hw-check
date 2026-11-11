@@ -2,6 +2,8 @@
 
 **Catch the mistakes that make an autograder score 0 — before you submit.**
 
+[docs](https://fordf0816.github.io/hw-check/) · [PyPI](https://pypi.org/project/hw-check/) · [changelog](CHANGELOG.md)
+
 ---
 
 ## Why
