@@ -304,8 +304,8 @@ mkdocs serve                      # docs at http://127.0.0.1:8000
 - [x] Rules 1–10
 - [x] `--json`, exit codes, several `--spec` names
 - [x] Documentation site
-- [ ] `--fix` suggestions
-- [ ] Pre-commit hook
+- [x] `--fix` suggestions
+- [x] Pre-commit hook
 
 ---
 
