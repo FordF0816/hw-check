@@ -39,9 +39,9 @@ Existing tools answer a different question.
 
 | Tool | Answers | Cannot answer |
 |---|---|---|
-| `pytest` | does the logic produce the right value? | will the autograder even find the function? |
-| `flake8` | is the code styled correctly? | is the output format what the grader expects? |
-| `mypy` | are the types consistent? | does `__init__` return a value? |
+|  `pytest`  | does the logic produce the right value? | will the autograder even find the function? |
+|  `flake8`  | is the code styled correctly? | is the output format what the grader expects? |
+|  `mypy`  | are the types consistent? | does `__init__` return a value? |
 
 None of them model **the grader's contract** — the set of structural
 assumptions an autograder makes before it ever runs your logic:
