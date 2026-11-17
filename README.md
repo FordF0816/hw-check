@@ -312,3 +312,10 @@ mkdocs serve                      # docs at http://127.0.0.1:8000
 ## Licence
 
 MIT
+
+## What a passing check means
+
+Passing all 10 checks means hw-check found no mistakes covered by its
+rules. It does not prove that the algorithm is correct or that the
+submission will receive full marks. Test your program against the
+assignment requirements before submitting it.
