@@ -319,3 +319,9 @@ Passing all 10 checks means hw-check found no mistakes covered by its
 rules. It does not prove that the algorithm is correct or that the
 submission will receive full marks. Test your program against the
 assignment requirements before submitting it.
+
+## Proposed feature: prompt & variable validator
+To help ensuring the variable and function names strictly follow assignment instructions, adding a **Prompt & Variable Validator** mode:
+Extract Requirements from Prompt:** Parse the pasted assignment text (using keywords/regent rules or an LLM) to extract a list of required function names, parameter names, and variable names.
+Parse code via AST:** use Python's ast module to collect all function definitions, arguments, and assigned variable names in the student's solution.
+Compare and Flag Mismatches:** Cross-check the 2 lists and warn the students if any required variable or function name is misspelled, or has mismatched parameters names.
