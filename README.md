@@ -304,8 +304,8 @@ mkdocs serve                      # docs at http://127.0.0.1:8000
 - [x] Rules 1–10
 - [x] `--json`, exit codes, several `--spec` names
 - [x] Documentation site
-- [x] `--fix` suggestions
-- [x] Pre-commit hook
+- [ ] `--fix` suggestions
+- [ ] Pre-commit hook
 
 ---
 
@@ -321,7 +321,14 @@ submission will receive full marks. Test your program against the
 assignment requirements before submitting it.
 
 ## Proposed feature: prompt & variable validator
-To help ensuring the variable and function names strictly follow assignment instructions, adding a **Prompt & Variable Validator** mode:
-Extract Requirements from Prompt:** Parse the pasted assignment text (using keywords/regent rules or an LLM) to extract a list of required function names, parameter names, and variable names.
-Parse code via AST:** use Python's ast module to collect all function definitions, arguments, and assigned variable names in the student's solution.
-Compare and Flag Mismatches:** Cross-check the 2 lists and warn the students if any required variable or function name is misspelled, or has mismatched parameters names.
+
+To keep variable and function names in line with the assignment instructions,
+we propose a **Prompt & Variable Validator** mode:
+
+- **Extract requirements from the prompt** — parse the pasted assignment text
+  (keyword or regex rules) to extract the required function names, parameter
+  names and variable names.
+- **Parse the code via AST** — collect every function definition, argument and
+  assigned name in the student's solution.
+- **Compare and flag mismatches** — warn when a required name is misspelled or
+  a parameter name does not match.
